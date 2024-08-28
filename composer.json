@@ -1,0 +1,16 @@
+{
+    "name": "danilocgsilva/projects_manager",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Danilocgsilva\\ProjectsManager\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Danilo Silva",
+            "email": "contact@danilocgsilva.me"
+        }
+    ],
+    "require": {}
+}
