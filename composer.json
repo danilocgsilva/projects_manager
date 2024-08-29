@@ -1,6 +1,7 @@
 {
     "name": "danilocgsilva/projects_manager",
     "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Danilocgsilva\\ProjectsManager\\": "src/"
