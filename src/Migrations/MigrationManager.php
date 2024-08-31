@@ -9,7 +9,7 @@ use PDO;
 class MigrationManager
 {
     public function __construct(private PDO $pdo) {}
-    
+
     public function getNextMigrationClass(): string
     {
         if ($this->noTable()) {

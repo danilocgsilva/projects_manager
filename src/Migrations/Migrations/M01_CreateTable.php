@@ -11,6 +11,8 @@ class M01_CreateTable implements MigrationInterface
 {
     private string $databaseName;
 
+    private CONST FIRST_MIGRATION = true;
+
     public function setDatabaseName(string $databaseName): self
     {
         $this->databaseName = $databaseName;
@@ -30,5 +32,10 @@ class M01_CreateTable implements MigrationInterface
     public function getRollbackScript(): string
     {
         return sprintf("DROP DATABASE %s;", $this->databaseName);
+    }
+
+    public function isFirstMigration(): bool
+    {
+        return self::FIRST_MIGRATION;
     }
 }
