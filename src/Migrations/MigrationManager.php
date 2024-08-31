@@ -35,24 +35,24 @@ class MigrationManager
 
     private function noTable(): bool
     {
-        return (bool) $this->getPdoDatabase();
+        return $this->getPdoDatabase() === "" ? true : false;
     }
 
     private function onlyOneMigration(): bool
     {
         $preResults = $this->pdo->prepare(
-            sprintf("SHOW TABLES", $this->getPdoDatabase())
+            sprintf("SHOW TABLES;", $this->getPdoDatabase())
         );
         $preResults->execute();
         $tables = [];
         while ($row = $preResults->fetch(PDO::FETCH_NUM)) {
-            $table[] = $row[0];
+            $tables[] = $row[0];
         }
-        return count($table) === 1;
+        return count($tables) === 1;
     }
 
     private function getPdoDatabase(): string
     {
-        return $this->pdo->query("SELECT DATABASE();")->fetchColumn();
+        return $this->pdo->query("SELECT DATABASE();")->fetchColumn() ?? "";
     }
 }
