@@ -6,5 +6,7 @@ namespace Danilocgsilva\ProjectsManager\Migrations;
 
 interface MigrationInterface
 {
-    
+    public function getScript(): string;
+
+    public function getRollbackScript(): string;
 }
