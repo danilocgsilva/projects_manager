@@ -13,7 +13,7 @@ class MigrationManager
     public function getNextMigrationClass(): string
     {
         if ($this->noTable()) {
-            return "M01_CreateTable";
+            return "\Danilocgsilva\ProjectsManager\Migrations\M01_CreateTable";
         }
         
         return "";
