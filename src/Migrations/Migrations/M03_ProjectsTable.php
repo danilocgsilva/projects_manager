@@ -8,7 +8,7 @@ use Danilocgsilva\ClassToSqlSchemaScript\FieldScriptSpitter;
 use Danilocgsilva\ClassToSqlSchemaScript\TableScriptSpitter;
 use Danilocgsilva\ProjectsManager\Models\Project;
 
-class M02_ProjectsTable implements MigrationInterface
+class M03_ProjectsTable implements MigrationInterface
 {
     public CONST FIRST_MIGRATION = false;
     

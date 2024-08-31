@@ -6,12 +6,15 @@ namespace Danilocgsilva\ProjectsManager\Migrations;
 
 use PDO;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateTable;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_ProjectsTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
 
 class MigrationManager
 {
     public function __construct(private PDO $pdo) {}
 
+    /**
+     * @return string
+     */
     public function getNextMigrationClass(): string
     {
         if ($this->noTable()) {
@@ -19,12 +22,16 @@ class MigrationManager
         }
 
         if ($this->onlyOneMigration()) {
-            return M02_ProjectsTable::class;
+            return M02_MigrationsTable::class;
         }
         
         return "";
     }
 
+    /**
+     * @throws \Danilocgsilva\ProjectsManager\Migrations\NoMigrationsLeft
+     * @return string
+     */
     public function getPreviousMigrationClass(): string
     {
         if ($this->noTable()) {
@@ -33,11 +40,17 @@ class MigrationManager
         return "";
     }
 
+    /**
+     * @return bool
+     */
     private function noTable(): bool
     {
         return $this->getPdoDatabase() === "" ? true : false;
     }
 
+    /**
+     * @return bool
+     */
     private function onlyOneMigration(): bool
     {
         $preResults = $this->pdo->prepare(
@@ -51,6 +64,9 @@ class MigrationManager
         return count($tables) === 1;
     }
 
+    /**
+     * @return string
+     */
     private function getPdoDatabase(): string
     {
         return $this->pdo->query("SELECT DATABASE();")->fetchColumn() ?? "";
