@@ -18,7 +18,7 @@ class MigrationManager
             return M01_CreateTable::class;
         }
 
-        if ($this->onlyMigration()) {
+        if ($this->onlyOneMigration()) {
             return M02_ProjectsTable::class;
         }
         
@@ -35,11 +35,24 @@ class MigrationManager
 
     private function noTable(): bool
     {
-        return (bool) $this->pdo->query("SELECT DATABASE();")->fetchColumn();
+        return (bool) $this->getPdoDatabase();
     }
 
-    private function onlyMigration(): bool
+    private function onlyOneMigration(): bool
     {
-        $preResults = $this->pdo->prepare();
+        $preResults = $this->pdo->prepare(
+            sprintf("SHOW TABLES", $this->getPdoDatabase())
+        );
+        $preResults->execute();
+        $tables = [];
+        while ($row = $preResults->fetch(PDO::FETCH_NUM)) {
+            $table[] = $row[0];
+        }
+        return count($table) === 1;
+    }
+
+    private function getPdoDatabase(): string
+    {
+        return $this->pdo->query("SELECT DATABASE();")->fetchColumn();
     }
 }
