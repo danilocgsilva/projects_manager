@@ -6,6 +6,7 @@ namespace Danilocgsilva\ProjectsManager\Migrations;
 
 use PDO;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_ProjectsTable;
 
 class MigrationManager
 {
@@ -16,6 +17,10 @@ class MigrationManager
         if ($this->noTable()) {
             return M01_CreateTable::class;
         }
+
+        if ($this->onlyMigration()) {
+            return M02_ProjectsTable::class;
+        }
         
         return "";
     }
@@ -23,13 +28,18 @@ class MigrationManager
     public function getPreviousMigrationClass(): string
     {
         if ($this->noTable()) {
-            return "";
+            throw new NoMigrationsLeft();
         }
         return "";
     }
 
     private function noTable(): bool
     {
-        return true;
+        return (bool) $this->pdo->query("SELECT DATABASE();")->fetchColumn();
+    }
+
+    private function onlyMigration(): bool
+    {
+        $preResults = $this->pdo->prepare();
     }
 }
