@@ -24,6 +24,10 @@ class MigrationManager
         if ($this->onlyOneMigration()) {
             return M02_MigrationsTable::class;
         }
+
+        if ($this->haveMigrationTable()) {
+
+        }
         
         return "";
     }
@@ -70,5 +74,10 @@ class MigrationManager
     private function getPdoDatabase(): string
     {
         return $this->pdo->query("SELECT DATABASE();")->fetchColumn() ?? "";
+    }
+
+    private function haveMigrationTable(): bool
+    {
+        "SHOW TABLES;"
     }
 }
