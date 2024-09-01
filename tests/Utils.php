@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M03_ProjectsTable;
 use PDO;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateTable;
 use Danilocgsilva\ProjectsManager\Migrations\MigrationManager;
@@ -40,7 +41,7 @@ class Utils
         )->execute();
     }
 
-    public function migrate01()
+    public function migrate01(): void
     {
         /** @var M01_CreateTable */
         $firstMigration = new M01_CreateTable();
@@ -48,10 +49,17 @@ class Utils
         $this->pdo->prepare($firstMigration->getScript())->execute();
     }
 
-    public function migrate02()
+    public function migrate02(): void
     {
         /** @var M02_MigrationsTable */
         $migration = new M02_MigrationsTable();
+        $this->pdo->prepare($migration->getScript())->execute();
+    }
+
+    public function migrate03(): void
+    {
+        /** @var M03_ProjectsTable */
+        $migration = new M03_ProjectsTable();
         $this->pdo->prepare($migration->getScript())->execute();
     }
 }

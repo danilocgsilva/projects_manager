@@ -26,7 +26,7 @@ class MigrationManager
             return M02_MigrationsTable::class;
         }
 
-        if ($this->onlyOneMigration()) {
+        if (count($this->getTablesName()) === 1) {
             return M03_ProjectsTable::class;
         }
         
@@ -39,8 +39,11 @@ class MigrationManager
      */
     public function getPreviousMigrationClass(): string
     {
-        if ($this->noDatabase()) {
-            throw new NoMigrationsLeft();
+        if (count($this->getTablesName()) === 2) {
+            return M02_MigrationsTable::class;
+        }
+        if (count($this->getTablesName()) === 1) {
+            return M01_CreateTable::class;
         }
         return "";
     }
@@ -69,14 +72,6 @@ class MigrationManager
     private function noTables(): bool
     {
         return count($this->getTablesName()) === 0;
-    }
-
-    /**
-     * @return bool
-     */
-    private function onlyOneMigration(): bool
-    {
-        return count($this->getTablesName()) === 1;
     }
 
     /**

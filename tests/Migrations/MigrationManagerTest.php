@@ -50,4 +50,35 @@ class MigrationManagerTest extends TestCase
 
         $this->assertSame(M03_ProjectsTable::class, $thirdMigrationString);
     }
+
+    public function testGetPreviousMigrationAfterThreeMigrations(): void
+    {
+        $testDatabaseName = "projects_manager_tests";
+        Utils::dropDatabase($testDatabaseName);
+        $pdo = Utils::getPdoWithoutDatabase();
+
+        $utils = new Utils($testDatabaseName, $pdo);
+        $utils->migrate01();
+        $utils->migrate02();
+        $utils->migrate03();
+
+        $migrationManager = new MigrationManager($pdo);
+        $previousMigrationString = $migrationManager->getPreviousMigrationClass();
+        $this->assertSame(M02_MigrationsTable::class, $previousMigrationString);
+    }
+
+    public function testGetPreviousMigrationAfterTwoOnes(): void
+    {
+        $testDatabaseName = "projects_manager_tests";
+        Utils::dropDatabase($testDatabaseName);
+        $pdo = Utils::getPdoWithoutDatabase();
+
+        $utils = new Utils($testDatabaseName, $pdo);
+        $utils->migrate01();
+        $utils->migrate02();
+
+        $migrationManager = new MigrationManager($pdo);
+        $previousMigrationString = $migrationManager->getPreviousMigrationClass();
+        $this->assertSame(M01_CreateTable::class, $previousMigrationString);
+    }
 }
