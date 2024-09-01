@@ -17,17 +17,19 @@ class MigrationManager
      */
     public function getNextMigrationClass(): string
     {
-        if ($this->noTable()) {
+        if ($this->noDatabase()) {
             return M01_CreateTable::class;
         }
 
-        if ($this->onlyOneMigration()) {
+        if ($this->noTables()) {
             return M02_MigrationsTable::class;
         }
 
+        /*
         if ($this->haveMigrationTable()) {
 
         }
+        */
         
         return "";
     }
@@ -38,7 +40,7 @@ class MigrationManager
      */
     public function getPreviousMigrationClass(): string
     {
-        if ($this->noTable()) {
+        if ($this->noDatabase()) {
             throw new NoMigrationsLeft();
         }
         return "";
@@ -47,15 +49,12 @@ class MigrationManager
     /**
      * @return bool
      */
-    private function noTable(): bool
+    private function noDatabase(): bool
     {
         return $this->getPdoDatabase() === "" ? true : false;
     }
 
-    /**
-     * @return bool
-     */
-    private function onlyOneMigration(): bool
+    private function getTablesName(): array
     {
         $preResults = $this->pdo->prepare(
             sprintf("SHOW TABLES;", $this->getPdoDatabase())
@@ -65,7 +64,20 @@ class MigrationManager
         while ($row = $preResults->fetch(PDO::FETCH_NUM)) {
             $tables[] = $row[0];
         }
-        return count($tables) === 1;
+        return $tables;
+    }
+
+    private function noTables(): bool
+    {
+        return count($this->getTablesName()) === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    private function onlyOneMigration(): bool
+    {
+        return count($this->getTablesName()) === 1;
     }
 
     /**
@@ -76,8 +88,10 @@ class MigrationManager
         return $this->pdo->query("SELECT DATABASE();")->fetchColumn() ?? "";
     }
 
+    /*
     private function haveMigrationTable(): bool
     {
         "SHOW TABLES;"
     }
+        */
 }

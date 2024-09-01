@@ -16,4 +16,18 @@ class Utils
             getenv('PROJECTS_MANAGER_DB_TEST_PASSWORD')
         );
     }
+
+    public static function dropDatabase(string $databaseName): void
+    {
+        self::getPdoWithoutDatabase()->prepare(
+            sprintf("DROP DATABASE %s;", $databaseName)
+        )->execute();
+    }
+
+    public static function useDatabase(string $databaseName): void
+    {
+        self::getPdoWithoutDatabase()->prepare(
+            sprintf("USE %s;", $databaseName)
+        )->execute();
+    }
 }
