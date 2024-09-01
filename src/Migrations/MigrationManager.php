@@ -7,6 +7,7 @@ namespace Danilocgsilva\ProjectsManager\Migrations;
 use PDO;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateTable;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M03_ProjectsTable;
 
 class MigrationManager
 {
@@ -25,11 +26,9 @@ class MigrationManager
             return M02_MigrationsTable::class;
         }
 
-        /*
-        if ($this->haveMigrationTable()) {
-
+        if ($this->onlyOneMigration()) {
+            return M03_ProjectsTable::class;
         }
-        */
         
         return "";
     }
