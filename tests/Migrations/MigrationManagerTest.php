@@ -16,6 +16,25 @@ use Danilocgsilva\ProjectsManager\Migrations\Migrations\{
 
 class MigrationManagerTest extends TestCase
 {
+    /**
+     * @var MigrationManager
+     */
+    private MigrationManager $migrationManager;
+
+    /**
+     * @var Utils
+     */
+    private Utils $utils;
+
+    public function setUp(): void
+    {
+        $testDatabaseName = "projects_manager_tests";
+        Utils::dropDatabase($testDatabaseName);
+        $pdo = Utils::getPdoWithoutDatabase();
+        $this->utils = new Utils($testDatabaseName, $pdo);
+        $this->migrationManager = new MigrationManager($pdo);
+    }
+    
     public function testGetFirstMigration(): void
     {
         $migrationManager = new MigrationManager(Utils::getPdoWithoutDatabase());
@@ -25,79 +44,48 @@ class MigrationManagerTest extends TestCase
 
     public function testSecondMigration(): void
     {
-        $testDatabaseName = "projects_manager_tests";
-        Utils::dropDatabase($testDatabaseName);
-        $pdo = Utils::getPdoWithoutDatabase();
+        $this->utils->migrate01();
 
-        $migrationManager = new MigrationManager($pdo);
-
-        $utils = new Utils($testDatabaseName, $pdo);
-        $utils->migrate01();
-
-        $secondMigrationString = $migrationManager->getNextMigrationClass();
+        $secondMigrationString = $this->migrationManager->getNextMigrationClass();
         $this->assertSame(M02_MigrationsTable::class, $secondMigrationString);
     }
 
     public function testThirdMigration(): void
     {
-        $testDatabaseName = "projects_manager_tests";
-        Utils::dropDatabase($testDatabaseName);
-        $pdo = Utils::getPdoWithoutDatabase();
-
-        $utils = new Utils($testDatabaseName, $pdo);
-        $utils->migrate01();
-        $utils->migrate02();
+        $this->utils->migrate01();
+        $this->utils->migrate02();
         
-        $migrationManager = new MigrationManager($pdo);
-        $thirdMigrationString = $migrationManager->getNextMigrationClass();
+        $thirdMigrationString = $this->migrationManager->getNextMigrationClass();
 
         $this->assertSame(M03_ProjectsTable::class, $thirdMigrationString);
     }
 
     public function testGetPreviousMigrationAfterThreeMigrations(): void
     {
-        $testDatabaseName = "projects_manager_tests";
-        Utils::dropDatabase($testDatabaseName);
-        $pdo = Utils::getPdoWithoutDatabase();
+        $this->utils->migrate01();
+        $this->utils->migrate02();
+        $this->utils->migrate03();
 
-        $utils = new Utils($testDatabaseName, $pdo);
-        $utils->migrate01();
-        $utils->migrate02();
-        $utils->migrate03();
-
-        $migrationManager = new MigrationManager($pdo);
-        $previousMigrationString = $migrationManager->getPreviousMigrationClass();
+        $previousMigrationString = $this->migrationManager->getPreviousMigrationClass();
         $this->assertSame(M02_MigrationsTable::class, $previousMigrationString);
     }
 
     public function testGetPreviousMigrationAfterTwoOnes(): void
     {
-        $testDatabaseName = "projects_manager_tests";
-        Utils::dropDatabase($testDatabaseName);
-        $pdo = Utils::getPdoWithoutDatabase();
+        $this->utils->migrate01();
+        $this->utils->migrate02();
 
-        $utils = new Utils($testDatabaseName, $pdo);
-        $utils->migrate01();
-        $utils->migrate02();
-
-        $migrationManager = new MigrationManager($pdo);
-        $previousMigrationString = $migrationManager->getPreviousMigrationClass();
+        $previousMigrationString = $this->migrationManager->getPreviousMigrationClass();
         $this->assertSame(M01_CreateDatabase::class, $previousMigrationString);
     }
 
     public function testMigration4(): void
     {
-        $testDatabaseName = "projects_manager_tests";
-        Utils::dropDatabase($testDatabaseName);
-        $pdo = Utils::getPdoWithoutDatabase();
+        $this->utils->migrate01();
+        $this->utils->migrate02();
+        $this->utils->migrate03();
 
-        $utils = new Utils($testDatabaseName, $pdo);
-        $utils->migrate01();
-        $utils->migrate02();
-        $utils->migrate03();
-
-        $migrationManager = new MigrationManager($pdo);
-        $nextMigrationString = $migrationManager->getNextMigrationClass();
+        $nextMigrationString = $this->migrationManager->getNextMigrationClass();
         $this->assertSame(M04_ExecutionEnvironmentsTable::class, $nextMigrationString);
     }
 }
