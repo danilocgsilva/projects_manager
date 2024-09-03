@@ -18,7 +18,7 @@ class ProjectRepository extends AbstractRepository
     public function save($projectModel): void
     {
         $this->pdo->prepare(
-            sprintf("INSERT INTO %s (`name`) VALUES (:name)", self::MODEL::TABLENAME)
+            sprintf("INSERT INTO %s (`name`) VALUES (:name)", self::MODEL::TABLE_NAME)
         )->execute([
             ':name' => $projectModel->name
         ]);
@@ -41,7 +41,7 @@ class ProjectRepository extends AbstractRepository
     public function get(int $id): Project
     {
         $preResults = $this->pdo->prepare(
-            sprintf("SELECT `id`, `name` FROM %s WHERE id = :id;", self::MODEL::TABLENAME)
+            sprintf("SELECT `id`, `name` FROM %s WHERE id = :id;", self::MODEL::TABLE_NAME)
         );
         $preResults->setFetchMode(PDO::FETCH_NUM);
         $preResults->execute([':id' => $id]);
@@ -60,7 +60,7 @@ class ProjectRepository extends AbstractRepository
     {
         $query = sprintf(
             "UPDATE %s SET name = :name WHERE id = :id;",
-            self::MODEL::TABLENAME
+            self::MODEL::TABLE_NAME
         );
 
         $this->pdo->prepare($query)->execute([
@@ -76,7 +76,7 @@ class ProjectRepository extends AbstractRepository
     public function delete(int $id): void
     {
         $this->pdo->prepare(
-            sprintf("DELETE FROM %s WHERE id = :id", self::MODEL::TABLENAME)
+            sprintf("DELETE FROM %s WHERE id = :id", self::MODEL::TABLE_NAME)
         )->execute([':id' => $id]);
     }
 
@@ -88,7 +88,7 @@ class ProjectRepository extends AbstractRepository
         $query = sprintf(
             "SELECT id, %s FROM %s;",
             "name",
-            self::MODEL::TABLENAME
+            self::MODEL::TABLE_NAME
         );
 
         $preResults = $this->pdo->prepare($query);

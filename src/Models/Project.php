@@ -6,11 +6,11 @@ namespace Danilocgsilva\ProjectsManager\Models;
 
 class Project implements ModelInterface
 {
-    private const TABLE_NAME = "project";
+    public const TABLE_NAME = "project";
 
-    private readonly int $id;
+    public readonly int $id;
 
-    private readonly string $name;
+    public readonly string $name;
     
     public static function getTableName(): string
     {
