@@ -3,20 +3,28 @@
 declare(strict_types=1);
 
 namespace Danilocgsilva\ProjectsManager\Migrations\Migrations;
-
 use Danilocgsilva\ClassToSqlSchemaScript\FieldScriptSpitter;
 use Danilocgsilva\ClassToSqlSchemaScript\TableScriptSpitter;
-use Danilocgsilva\ProjectsManager\Models\Project;
+use Danilocgsilva\ProjectsManager\Models\ExecutionEnvironment;
 
-class M03_ProjectsTable implements MigrationInterface
+class M04_ExecutionEnvironmentsTable implements MigrationInterface
 {
-    public CONST FIRST_MIGRATION = false;
+    private CONST DESCRIPTION = "Creates the table for execution environments. Means for instance, a development" .
+        " machine for a project. One project may ocasionally have several development machines";
 
-    private CONST DESCRIPTION = "Project database. First table related to business rules.";
-    
+    public function getDescription(): string
+    {
+        return self::DESCRIPTION;
+    }
+
+    public function isFirstMigration(): bool
+    {
+        return false;
+    }
+
     public function getScript(): string
     {
-        return (new TableScriptSpitter(Project::getTableName()))
+        return (new TableScriptSpitter(ExecutionEnvironment::getTableName()))
             ->addField(
                 (new FieldScriptSpitter("id"))
                     ->setAutoIncrement()
@@ -33,17 +41,6 @@ class M03_ProjectsTable implements MigrationInterface
 
     public function getRollbackScript(): string
     {
-        return sprintf("DROP TABLE %s;", Project::getTableName());
-    }
-
-    public function isFirstMigration(): bool
-    {
-        return self::FIRST_MIGRATION;
-    }
-
-    public function getDescription(): string
-    {
-        return self::DESCRIPTION;
+        return sprintf("DROP TABLE %s;", ExecutionEnvironment::getTableName());
     }
 }
-

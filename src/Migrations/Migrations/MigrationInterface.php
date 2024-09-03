@@ -11,4 +11,6 @@ interface MigrationInterface
     public function getRollbackScript(): string;
 
     public function isFirstMigration(): bool;
+
+    public function getDescription(): string;
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ProjectsManager\Models;
 
-class Project
+class Project implements ModelInterface
 {
     private const TABLE_NAME = "project";
 

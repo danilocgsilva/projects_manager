@@ -8,6 +8,7 @@ use PDO;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateDatabase;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M03_ProjectsTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M04_ExecutionEnvironmentsTable;
 
 class MigrationManager
 {
@@ -28,6 +29,10 @@ class MigrationManager
 
         if (count($this->getTablesName()) === 1) {
             return M03_ProjectsTable::class;
+        }
+
+        if (count($this->getTablesName()) === 2) {
+            return M04_ExecutionEnvironmentsTable::class;
         }
         
         return "";

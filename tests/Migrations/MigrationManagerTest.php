@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Tests\Migrations;
 
 use Danilocgsilva\ProjectsManager\Migrations\MigrationManager;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M03_ProjectsTable;
 use PHPUnit\Framework\TestCase;
 use Tests\Utils;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateDatabase;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\{
+    M01_CreateDatabase, 
+    M02_MigrationsTable, 
+    M03_ProjectsTable,
+    M04_ExecutionEnvironmentsTable
+};
 
 class MigrationManagerTest extends TestCase
 {
@@ -80,5 +83,21 @@ class MigrationManagerTest extends TestCase
         $migrationManager = new MigrationManager($pdo);
         $previousMigrationString = $migrationManager->getPreviousMigrationClass();
         $this->assertSame(M01_CreateDatabase::class, $previousMigrationString);
+    }
+
+    public function testMigration4(): void
+    {
+        $testDatabaseName = "projects_manager_tests";
+        Utils::dropDatabase($testDatabaseName);
+        $pdo = Utils::getPdoWithoutDatabase();
+
+        $utils = new Utils($testDatabaseName, $pdo);
+        $utils->migrate01();
+        $utils->migrate02();
+        $utils->migrate03();
+
+        $migrationManager = new MigrationManager($pdo);
+        $nextMigrationString = $migrationManager->getNextMigrationClass();
+        $this->assertSame(M04_ExecutionEnvironmentsTable::class, $nextMigrationString);
     }
 }

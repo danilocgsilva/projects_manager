@@ -10,6 +10,9 @@ class M02_MigrationsTable implements MigrationInterface
 {
     private CONST FIRST_MIGRATION = true;
 
+    private CONST DESCRIPTION = "Creates a migration table. Its is a meta structure " . 
+        "to handle the library migrations, so until here no business rule.";
+
     public function getScript(): string
     {
         return (new TableScriptSpitter("migrations"))
@@ -32,5 +35,10 @@ class M02_MigrationsTable implements MigrationInterface
     public function isFirstMigration(): bool
     {
         return self::FIRST_MIGRATION;
+    }
+
+    public function getDescription(): string
+    {
+        return self::DESCRIPTION;
     }
 }

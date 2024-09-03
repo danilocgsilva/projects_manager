@@ -13,6 +13,9 @@ class M01_CreateDatabase implements MigrationInterface
 
     private CONST FIRST_MIGRATION = true;
 
+    private CONST DESCRIPTION = "Create database. This migrations requires to receive a database name " . 
+        "with the method setDatabaseName. So it is possible to determine the database name for creation.";
+
     public function setDatabaseName(string $databaseName): self
     {
         $this->databaseName = $databaseName;
@@ -37,5 +40,10 @@ class M01_CreateDatabase implements MigrationInterface
     public function isFirstMigration(): bool
     {
         return self::FIRST_MIGRATION;
+    }
+
+    public function getDescription(): string
+    {
+        return self::DESCRIPTION;
     }
 }
