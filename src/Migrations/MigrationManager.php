@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Danilocgsilva\ProjectsManager\Migrations;
 
 use PDO;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateDatabase;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M03_ProjectsTable;
 
@@ -19,7 +19,7 @@ class MigrationManager
     public function getNextMigrationClass(): string
     {
         if ($this->noDatabase()) {
-            return M01_CreateTable::class;
+            return M01_CreateDatabase::class;
         }
 
         if ($this->noTables()) {
@@ -43,7 +43,7 @@ class MigrationManager
             return M02_MigrationsTable::class;
         }
         if (count($this->getTablesName()) === 1) {
-            return M01_CreateTable::class;
+            return M01_CreateDatabase::class;
         }
         return "";
     }

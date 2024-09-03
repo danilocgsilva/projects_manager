@@ -7,7 +7,7 @@ namespace Danilocgsilva\ProjectsManager\Migrations\Migrations;
 use Danilocgsilva\ClassToSqlSchemaScript\DatabaseScriptSpitter;
 use Exception;
 
-class M01_CreateTable implements MigrationInterface
+class M01_CreateDatabase implements MigrationInterface
 {
     private string $databaseName;
 

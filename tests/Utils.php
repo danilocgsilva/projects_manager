@@ -6,7 +6,7 @@ namespace Tests;
 
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M03_ProjectsTable;
 use PDO;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateDatabase;
 use Danilocgsilva\ProjectsManager\Migrations\MigrationManager;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
 
@@ -43,8 +43,8 @@ class Utils
 
     public function migrate01(): void
     {
-        /** @var M01_CreateTable */
-        $firstMigration = new M01_CreateTable();
+        /** @var M01_CreateDatabase */
+        $firstMigration = new M01_CreateDatabase();
         $firstMigration->setDatabaseName($this->databaseTestName);
         $this->pdo->prepare($firstMigration->getScript())->execute();
     }

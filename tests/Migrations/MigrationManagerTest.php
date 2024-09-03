@@ -8,7 +8,7 @@ use Danilocgsilva\ProjectsManager\Migrations\MigrationManager;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M03_ProjectsTable;
 use PHPUnit\Framework\TestCase;
 use Tests\Utils;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateDatabase;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
 
 class MigrationManagerTest extends TestCase
@@ -17,7 +17,7 @@ class MigrationManagerTest extends TestCase
     {
         $migrationManager = new MigrationManager(Utils::getPdoWithoutDatabase());
         $firstMigration = $migrationManager->getNextMigrationClass();
-        $this->assertSame(M01_CreateTable::class, $firstMigration);
+        $this->assertSame(M01_CreateDatabase::class, $firstMigration);
     }
 
     public function testSecondMigration(): void
@@ -79,6 +79,6 @@ class MigrationManagerTest extends TestCase
 
         $migrationManager = new MigrationManager($pdo);
         $previousMigrationString = $migrationManager->getPreviousMigrationClass();
-        $this->assertSame(M01_CreateTable::class, $previousMigrationString);
+        $this->assertSame(M01_CreateDatabase::class, $previousMigrationString);
     }
 }
