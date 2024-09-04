@@ -9,6 +9,7 @@ use PDO;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateDatabase;
 use Danilocgsilva\ProjectsManager\Migrations\MigrationManager;
 use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\M04_ExecutionEnvironmentsTable;
 
 class Utils
 {
@@ -58,8 +59,15 @@ class Utils
 
     public function migrate03(): void
     {
-        /** @var M03_ProjectsTable */
+        /** @var M03_ProjectsTable $migration */
         $migration = new M03_ProjectsTable();
+        $this->pdo->prepare($migration->getScript())->execute();
+    }
+
+    public function migrate04(): void
+    {
+        /** @var M04_ExecutionEnvironmentsTable $migration */
+        $migration = new M04_ExecutionEnvironmentsTable();
         $this->pdo->prepare($migration->getScript())->execute();
     }
 
