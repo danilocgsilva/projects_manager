@@ -7,6 +7,8 @@ namespace Danilocgsilva\ProjectsManager\Migrations\Migrations;
 use Danilocgsilva\ClassToSqlSchemaScript\TableScriptSpitter;
 use Danilocgsilva\ProjectsManager\Models\Database;
 use Danilocgsilva\ClassToSqlSchemaScript\FieldScriptSpitter;
+use Danilocgsilva\ClassToSqlSchemaScript\ForeignKeyScriptSpitter;
+use Danilocgsilva\ProjectsManager\Models\Project;
 
 class M05_DatabaseTable implements MigrationInterface
 {
@@ -22,7 +24,10 @@ class M05_DatabaseTable implements MigrationInterface
 
     public function getRollbackScript(): string
     {
-        return sprintf("DROP TABLE %s;", Database::getTableName());
+        $removeForeignKeyScript = sprintf("DROP CONSTRAINT %s", "project_id_id_constraint");
+        $removeTableScript = sprintf("DROP TABLE %s;", Database::getTableName());
+
+        return $removeForeignKeyScript . PHP_EOL . $removeTableScript;
     }
 
     public function isFirstMigration(): bool
@@ -47,19 +52,21 @@ class M05_DatabaseTable implements MigrationInterface
                     ->setType("INT")
             )
             ->addField(
-                (new FieldScriptSpitter("name"))->setType("VARCHAR(192)")
+                (new FieldScriptSpitter("name"))
+                    ->setType("VARCHAR(192)")
+                    ->setNotNull()
             )
             ->addField(
-                (new FieldScriptSpitter("host"))->setType("VARCHAR(192)")
+                (new FieldScriptSpitter("user"))
+                    ->setType("VARCHAR(192)")
             )
             ->addField(
-                (new FieldScriptSpitter("user"))->setType("VARCHAR(192)")
+                (new FieldScriptSpitter("passwordHash"))
+                    ->setType("TEXT")
             )
             ->addField(
-                (new FieldScriptSpitter("passwordHash"))->setType("TEXT")
-            )
-            ->addField(
-                (new FieldScriptSpitter("description"))->setType("VARCHAR(192)")
+                (new FieldScriptSpitter("description"))
+                    ->setType("VARCHAR(192)")
             )
             ->addField(
                 (new FieldScriptSpitter("project_id"))
@@ -71,6 +78,12 @@ class M05_DatabaseTable implements MigrationInterface
 
     private function getForeignKeyScript(): string
     {
-        return "";
+        return (new ForeignKeyScriptSpitter())
+            ->setTable(Database::TABLE_NAME)
+            ->setConstraintName("project_id_id_constraint")
+            ->setForeignKey("project_id")
+            ->setForeignTable(Project::TABLE_NAME)
+            ->setTableForeignkey("id")
+            ->getScript();
     }
 }

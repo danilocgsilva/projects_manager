@@ -12,8 +12,6 @@ class Database implements ModelInterface
 
     public readonly string $name;
 
-    public readonly string $host;
-
     public readonly string $user;
 
     public readonly string $passwordHash;
@@ -34,12 +32,6 @@ class Database implements ModelInterface
     public function setName(string $name): self
     {
         $this->name = $name;
-        return $this;
-    }
-
-    public function setHost(string $host): self
-    {
-        $this->host = $host;
         return $this;
     }
 

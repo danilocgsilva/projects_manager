@@ -11,7 +11,8 @@ use Danilocgsilva\ProjectsManager\Migrations\Migrations\{
     M01_CreateDatabase, 
     M02_MigrationsTable, 
     M03_ProjectsTable,
-    M04_ExecutionEnvironmentsTable
+    M04_ExecutionEnvironmentsTable,
+    M05_DatabaseTable
 };
 
 class MigrationManagerTest extends TestCase
@@ -87,5 +88,16 @@ class MigrationManagerTest extends TestCase
 
         $nextMigrationString = $this->migrationManager->getNextMigrationClass();
         $this->assertSame(M04_ExecutionEnvironmentsTable::class, $nextMigrationString);
+    }
+
+    public function testMigration5(): void
+    {
+        $this->utils->migrate01();
+        $this->utils->migrate02();
+        $this->utils->migrate03();
+        $this->utils->migrate04();
+
+        $nextMigrationString = $this->migrationManager->getNextMigrationClass();
+        $this->assertSame(M05_DatabaseTable::class, $nextMigrationString);
     }
 }

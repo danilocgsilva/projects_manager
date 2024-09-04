@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Danilocgsilva\ProjectsManager\Migrations;
 
 use PDO;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M01_CreateDatabase;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M02_MigrationsTable;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M03_ProjectsTable;
-use Danilocgsilva\ProjectsManager\Migrations\Migrations\M04_ExecutionEnvironmentsTable;
+use Danilocgsilva\ProjectsManager\Migrations\Migrations\{
+    M01_CreateDatabase,
+    M02_MigrationsTable,
+    M03_ProjectsTable,
+    M04_ExecutionEnvironmentsTable,
+    M05_DatabaseTable
+};
 
 class MigrationManager
 {
@@ -33,6 +36,10 @@ class MigrationManager
 
         if (count($this->getTablesName()) === 2) {
             return M04_ExecutionEnvironmentsTable::class;
+        }
+
+        if (count($this->getTablesName()) === 3) {
+            return M05_DatabaseTable::class;
         }
         
         return "";
@@ -86,11 +93,4 @@ class MigrationManager
     {
         return $this->pdo->query("SELECT DATABASE();")->fetchColumn() ?? "";
     }
-
-    /*
-    private function haveMigrationTable(): bool
-    {
-        "SHOW TABLES;"
-    }
-        */
 }
