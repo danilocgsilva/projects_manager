@@ -30,7 +30,6 @@ class ProjectRepositoryTest extends TestCase
         $this->utils = new Utils($testDatabaseName, $this->pdo);
 
         $this->utils->migrate01();
-        $this->utils->migrate02();
         $this->utils->migrate03();
 
         $this->projectRepository = new ProjectRepository($this->pdo);
