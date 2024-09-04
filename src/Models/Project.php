@@ -6,7 +6,7 @@ namespace Danilocgsilva\ProjectsManager\Models;
 
 class Project implements ModelInterface
 {
-    public const TABLE_NAME = "project";
+    public const TABLE_NAME = "projects";
 
     public readonly int $id;
 
